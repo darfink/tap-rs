@@ -7,10 +7,17 @@
 A simple crate exposing tapping functionality for all types, and extended
 functionality for `Option`, `Result` & `Future`. Often useful for logging.
 
+The tap operation takes, and then returns, full ownership of the variable being
+tapped. This means that the closure may have mutable access to the variable,
+even if the variable is otherwise immutable. Mutating closures require the
+`|mut name|` pattern, and so can be easily distinguished from non-mutating taps.
+
 ## Features
 
 * `future` - Exposes the `TapFutureOps` trait, providing `tap_ready`,
   `tap_not_ready` & `tap_err` (requires the *futures* crate).
+
+  Futures do not provide mutable access for tap closures.
 
 ## Example
 
@@ -46,6 +53,16 @@ fn basic() {
     // Options have `tap_some` & `tap_none` available.
     let _: Option<i32> = None.tap_none(|| foo = 10);
     assert_eq!(foo, 10);
+}
+
+#[test]
+fn mutable() {
+    let base = [1, 2, 3];
+    let mutated = base.tap(|mut arr| for elt in arr.iter_mut() {
+        *elt *= 2;
+    });
+    assert_eq!(mutated, [2, 4, 6]);
+    //  base was consumed, and then returned into mutated, and is out of scope.
 }
 
 ```
