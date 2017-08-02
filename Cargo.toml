@@ -8,7 +8,7 @@ license = "MIT"
 name = "tap"
 readme = "README.md"
 repository = "https://github.com/darfink/tap-rs"
-version = "0.1.0"
+version = "0.2.0"
 
 [dependencies.futures]
 optional = true
