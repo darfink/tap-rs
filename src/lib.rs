@@ -8,6 +8,31 @@ mod future;
 #[cfg_attr(test, macro_use)]
 extern crate matches;
 
+/// Tap operations for `bool`.
+pub trait TapBooleanOps {
+    /// Executes a closure if the value is `Result::Ok(T)`.
+    fn tap_true<R, F: FnOnce(&mut bool) -> R>(self, f: F) -> Self;
+
+    /// Executes a closure if the value is `Result::Err(E)`.
+    fn tap_false<R, F: FnOnce(&mut bool) -> R>(self, f: F) -> Self;
+}
+
+impl TapBooleanOps for bool {
+    fn tap_true<R, F: FnOnce(&mut bool) -> R>(mut self, f: F) -> Self {
+        if self {
+            let _ = f(&mut self);
+        }
+        self
+    }
+
+    fn tap_false<R, F: FnOnce(&mut bool) -> R>(mut self, f: F) -> Self {
+        if !self {
+            let _ = f(&mut self);
+        }
+        self
+    }
+}
+
 /// Tap operations for `Result`.
 pub trait TapResultOps<T, E> {
     /// Executes a closure if the value is `Result::Ok(T)`.
@@ -72,6 +97,14 @@ impl<T> TapOps for T where T: Sized {}
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn boolean() {
+        let mut foo = 0;
+        let boolean = false;
+        assert_eq!(boolean.tap_false(|_| foo += 5), false);
+        assert_eq!(foo, 5);
+    }
 
     #[test]
     fn option() {
