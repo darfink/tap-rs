@@ -4,6 +4,12 @@ pub use self::future::TapFutureOps;
 #[cfg(feature = "future")]
 mod future;
 
+#[cfg(feature = "nom3")]
+pub use self::nom::TapNomOps;
+
+#[cfg(feature = "nom3")]
+mod nom;
+
 #[cfg(test)]
 #[cfg_attr(test, macro_use)]
 extern crate matches;

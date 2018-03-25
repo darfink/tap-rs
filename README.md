@@ -19,6 +19,10 @@ even if the variable is otherwise immutable. Mutating closures require the
 
   Futures do not provide mutable access for tap closures.
 
+* `nom3` - Exposes the `TapNomOps` trait, which provides `tap_done`,
+  `tap_error`, and `tap_incomplete` on their respective variants of
+  `nom::IResult`.
+
 ## Example
 
 ```rust
