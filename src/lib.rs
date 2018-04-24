@@ -90,7 +90,7 @@ impl<T> TapOptionOps<T> for Option<T> {
 }
 
 /// Tap operations for all types.
-pub trait TapOps : Sized {
+pub trait TapOps: Sized {
     /// Executes a closure on an object.
     fn tap<R, F: FnOnce(&mut Self) -> R>(mut self, f: F) -> Self {
         let _ = f(&mut self);
@@ -98,7 +98,11 @@ pub trait TapOps : Sized {
     }
 }
 
-impl<T> TapOps for T where T: Sized {}
+impl<T> TapOps for T
+where
+    T: Sized,
+{
+}
 
 #[cfg(test)]
 mod tests {
@@ -138,8 +142,10 @@ mod tests {
     #[test]
     fn mutable() {
         let base = [1, 2, 3];
-        let mutated = base.tap(|mut arr| for elt in arr.iter_mut() {
-            *elt *= 2;
+        let mutated = base.tap(|mut arr| {
+            for elt in arr.iter_mut() {
+                *elt *= 2;
+            }
         });
         assert_eq!(mutated, [2, 4, 6]);
     }

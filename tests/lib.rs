@@ -1,6 +1,6 @@
 extern crate tap;
 
-use tap::{TapOps, TapResultOps, TapOptionOps};
+use tap::{TapOps, TapOptionOps, TapResultOps};
 
 #[test]
 fn filter_map() {
@@ -8,7 +8,9 @@ fn filter_map() {
     let _ = values.iter().filter_map(|result| {
         // It is especially useful in filter maps, allowing error information to
         // be logged/printed before the information is discarded.
-        result.tap_err(|error| println!("Invalid entry: {}", error)).ok()
+        result
+            .tap_err(|error| println!("Invalid entry: {}", error))
+            .ok()
     });
 }
 

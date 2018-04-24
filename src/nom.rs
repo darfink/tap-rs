@@ -44,8 +44,8 @@ impl<I, O, E> TapNomOps<I, O, E> for IResult<I, O, E> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use super::nom::ErrorKind;
+    use super::*;
     type TestResult = IResult<&'static str, i32, u32>;
 
     #[test]
@@ -65,8 +65,10 @@ mod tests {
     fn error() {
         let e: TestResult = IResult::Error(ErrorKind::Custom('t' as u32));
         let mut err_code = 0;
-        e.tap_error(|e| if let ErrorKind::Custom(c) = *e {
-            err_code = c;
+        e.tap_error(|e| {
+            if let ErrorKind::Custom(c) = *e {
+                err_code = c;
+            }
         });
         assert_eq!(err_code, 116);
     }
@@ -76,11 +78,12 @@ mod tests {
     fn incomplete() {
         let i: TestResult = IResult::Incomplete(Needed::Unknown);
         let mut more = 0;
-        i.tap_incomplete(|i| if let Needed::Size(s) = *i {
-            more = s;
-        }
-        else {
-            panic!();
+        i.tap_incomplete(|i| {
+            if let Needed::Size(s) = *i {
+                more = s;
+            } else {
+                panic!();
+            }
         });
     }
 }

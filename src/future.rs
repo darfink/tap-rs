@@ -55,7 +55,10 @@ mod tests {
         let mut foo = 0;
         let future = futures::future::empty::<i32, i32>();
 
-        assert_matches!(future.tap_not_ready(|| foo += 5).poll(), Ok(Async::NotReady));
+        assert_matches!(
+            future.tap_not_ready(|| foo += 5).poll(),
+            Ok(Async::NotReady)
+        );
         assert_eq!(foo, 5);
     }
 
