@@ -16,10 +16,10 @@ extern crate matches;
 
 /// Tap operations for `bool`.
 pub trait TapBooleanOps {
-    /// Executes a closure if the value is `Result::Ok(T)`.
+    /// Executes a closure if the value is `true`.
     fn tap_true<R, F: FnOnce(&mut bool) -> R>(self, f: F) -> Self;
 
-    /// Executes a closure if the value is `Result::Err(E)`.
+    /// Executes a closure if the value is `false`.
     fn tap_false<R, F: FnOnce(&mut bool) -> R>(self, f: F) -> Self;
 }
 
