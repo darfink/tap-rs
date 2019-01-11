@@ -75,7 +75,7 @@ pub trait TapOptionOps<T> {
 
 impl<T> TapOptionOps<T> for Option<T> {
     fn tap_some<R, F: FnOnce(&mut T) -> R>(mut self, f: F) -> Self {
-        if let Some(mut val) = self.as_mut() {
+        if let Some(val) = self.as_mut() {
             let _ = f(val);
         }
         self
@@ -98,11 +98,7 @@ pub trait TapOps: Sized {
     }
 }
 
-impl<T> TapOps for T
-where
-    T: Sized,
-{
-}
+impl<T> TapOps for T where T: Sized {}
 
 #[cfg(test)]
 mod tests {
