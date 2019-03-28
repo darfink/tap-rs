@@ -9,8 +9,7 @@ functionality for `Option`, `Result` & `Future`. Often useful for logging.
 
 The tap operation takes, and then returns, full ownership of the variable being
 tapped. This means that the closure may have mutable access to the variable,
-even if the variable is otherwise immutable. Mutating closures require the
-`|mut name|` pattern, and so can be easily distinguished from non-mutating taps.
+even if the variable was previously immutable.  This prevents accidental mutation.
 
 ## Features
 
@@ -28,20 +27,18 @@ even if the variable is otherwise immutable. Mutating closures require the
 ```rust
 extern crate tap;
 
-use tap::{TapOps, TapResultOps, TapOptionOps};
+use tap::*;
 
-#[test]
 fn filter_map() {
     let values: &[Result<i32, &str>] = &[Ok(3), Err("foo"), Err("bar"), Ok(8)];
 
     let _ = values.iter().filter_map(|result| {
         // It is especially useful in filter maps, allowing error information to
         // be logged/printed before the information is discarded.
-        result.tap_err(|error| println!("Invalid entry: {}", error)).ok()
+        result.tap_err(|error| eprintln!("Invalid entry: {}", error)).ok()
     });
 }
 
-#[test]
 fn basic() {
     let mut foo = 5;
 
@@ -59,16 +56,14 @@ fn basic() {
     assert_eq!(foo, 10);
 }
 
-#[test]
 fn mutable() {
     let base = [1, 2, 3];
-    let mutated = base.tap(|mut arr| for elt in arr.iter_mut() {
+    let mutated = base.tap(|arr| for elt in arr.iter_mut() {
         *elt *= 2;
     });
+    // base was consumed and is out of scope.
     assert_eq!(mutated, [2, 4, 6]);
-    //  base was consumed, and then returned into mutated, and is out of scope.
 }
-
 ```
 
 <!-- Links -->
