@@ -1,6 +1,6 @@
 extern crate tap;
 
-use tap::{TapOps, TapOptionOps, TapResultOps};
+use tap::*;
 
 #[test]
 fn filter_map() {

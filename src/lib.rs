@@ -79,7 +79,7 @@ pub trait TapBooleanOps {
     /// # use tap::*;
     /// let mut foo = 0;
     /// let boolean = false;
-    /// assert_eq!(boolean.tap_true(|_| foo += 5), false);
+    /// assert_eq!(boolean.tap_true(|| foo += 5), false);
     /// assert_eq!(foo, 0);
     /// ```
     /// 
@@ -87,10 +87,10 @@ pub trait TapBooleanOps {
     /// # use tap::*;
     /// let mut foo = 0;
     /// let boolean = true;
-    /// assert_eq!(boolean.tap_true(|_| foo += 5), true);
+    /// assert_eq!(boolean.tap_true(|| foo += 5), true);
     /// assert_eq!(foo, 5);
     /// ```
-    fn tap_true<R, F: FnOnce(&mut bool) -> R>(self, f: F) -> Self;
+    fn tap_true<R, F: FnOnce() -> R>(self, f: F) -> Self;
 
     /// Executes a closure if `self` is `false`.
     /// 
@@ -100,7 +100,7 @@ pub trait TapBooleanOps {
     /// # use tap::*;
     /// let mut foo = 0;
     /// let boolean = false;
-    /// assert_eq!(boolean.tap_false(|_| foo += 5), false);
+    /// assert_eq!(boolean.tap_false(|| foo += 5), false);
     /// assert_eq!(foo, 5);
     /// ```
     /// 
@@ -108,23 +108,23 @@ pub trait TapBooleanOps {
     /// # use tap::*;
     /// let mut foo = 0;
     /// let boolean = true;
-    /// assert_eq!(boolean.tap_false(|_| foo += 5), true);
+    /// assert_eq!(boolean.tap_false(|| foo += 5), true);
     /// assert_eq!(foo, 0);
     /// ```
-    fn tap_false<R, F: FnOnce(&mut bool) -> R>(self, f: F) -> Self;
+    fn tap_false<R, F: FnOnce() -> R>(self, f: F) -> Self;
 }
 
 impl TapBooleanOps for bool {
-    fn tap_true<R, F: FnOnce(&mut bool) -> R>(mut self, f: F) -> Self {
+    fn tap_true<R, F: FnOnce() -> R>(self, f: F) -> Self {
         if self {
-            let _ = f(&mut self);
+            let _ = f();
         }
         self
     }
 
-    fn tap_false<R, F: FnOnce(&mut bool) -> R>(mut self, f: F) -> Self {
+    fn tap_false<R, F: FnOnce() -> R>(self, f: F) -> Self {
         if !self {
-            let _ = f(&mut self);
+            let _ = f();
         }
         self
     }
