@@ -1,10 +1,11 @@
+//! Tap operations for nom's `IResult`, requires the feature `nom3`.
 extern crate nom;
 
 use self::nom::Err;
 use self::nom::IResult;
 use self::nom::Needed;
 
-/// Tap operations for nom's `IResult`.
+/// Tap operations for nom's `IResult`, requires the feature `nom3`.
 pub trait TapNomOps<I, O, E> {
     /// Executes a closure if the value is `IResult::Done`.
     ///

@@ -1,8 +1,9 @@
+//! Tap operations for `Future`, requires the feature `future`.
 extern crate futures;
 
 use self::futures::{Async, Future};
 
-/// Tap operations for `Future`.
+/// Tap operations for `Future`, requires the feature `future`.
 pub trait TapFutureOps<T, E> {
     /// Executes a closure if the value is `Async::Ready(T)`.
     fn tap_ready<R, F: FnOnce(&T) -> R>(self, f: F) -> Self;
@@ -55,11 +56,10 @@ mod tests {
         let mut foo = 0;
         let future = futures::future::empty::<i32, i32>();
 
-        assert_matches!(
-            future.tap_not_ready(|| foo += 5).poll(),
-            Ok(Async::NotReady)
-        );
-        assert_eq!(foo, 5);
+        match future.tap_not_ready(|| foo += 5).poll() {
+            Ok(Async::NotReady) => assert_eq!(foo, 5),
+            _ => unreachable!()
+        }
     }
 
     #[test]

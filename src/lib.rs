@@ -65,10 +65,6 @@ pub use self::nom::TapNomOps;
 #[cfg(feature = "nom3")]
 mod nom;
 
-#[cfg(test)]
-#[cfg_attr(test, macro_use)]
-extern crate matches;
-
 /// Tap operations for `bool`.
 pub trait TapBooleanOps {
     /// Executes a closure if `self` is `true`.
@@ -262,7 +258,10 @@ pub trait TapOps: Sized {
     /// # use tap::*;
     /// let mut max = 0;
     /// let data: [u32; 5] = [2, 8, 3, 4, 0];
-    /// assert_eq!(data.tap(|x| x.sort()).tap(|x| max += x.last().unwrap()), [0, 2, 3, 4, 8]);
+    /// assert_eq!(
+    ///     data.tap(|x| x.sort()).tap(|x| max += x.last().unwrap()), 
+    ///     [0, 2, 3, 4, 8]
+    /// );
     /// assert_eq!(max, 8);
     /// ```
     fn tap<R, F>(self, f: F) -> Self
