@@ -11,7 +11,7 @@ license = "MIT"
 name = "tap"
 readme = "README.md"
 repository = "https://github.com/darfink/tap-rs"
-version = "0.3.1"
+version = "0.4.0"
 
 [package.metadata.docs.rs]
 features = ["future, nom3"]
